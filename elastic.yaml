@@ -31,6 +31,7 @@ spec:
       containers:
         - name: elasticsearch
           image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+          imagePullPolicy: IfNotPresent
           env:
             - name: discovery.type
               value: single-node

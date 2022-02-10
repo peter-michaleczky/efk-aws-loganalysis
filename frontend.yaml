@@ -1,11 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    service: frontend
+spec:
+  ports:
+    - port: 8080
+      targetPort: 80
+  selector:
+    tier: frontend
+  type: NodePort
+---
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
   name: frontend
   labels:
     tier: frontend
 spec:
-  replicas: 2
   selector:
     matchLabels:
       tier: frontend
@@ -15,5 +28,9 @@ spec:
         tier: frontend
     spec:
       containers:
-        - name: php-redis
-          image: gcr.io/google_samples/gb-frontend:v3
+        - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+          imagePullPolicy: IfNotPresent
+          name: web
+          ports:
+            - containerPort: 80
+              protocol: TCP

@@ -6,7 +6,7 @@ Configure EFK cluster locally for loganalysis.
 
 ### Prerequisites
 
-- Docker Desktop
+- Docker Desktop (give 8 GB MB memory and 2 CPUs to Docker at least!)
 - Follow [this guide](https://minikube.sigs.k8s.io/docs/start/) to install minikube on macOS:
 
 ```
@@ -25,7 +25,17 @@ Verify the cluster is running:
 
 `minikube dashboard`
 
-## Deploy FluentBit DaemonSet
+## Deploy using YAML file
+
+To create loging namespace and all services in the cluster, execute the following command:
+
+`kubectl apply -k .`
+
+For details see the comments in [kustomization.yaml](kustomization.yaml)!
+
+## Deploy manually
+
+### Deploy FluentBit DaemonSet
 
 Follow [this guide](https://github.com/fluent/fluent-bit-kubernetes-logging) to deploy FluentBit as a DaemonSet on the local cluster.
 
@@ -54,11 +64,3 @@ Verify that the daemon set appears in the dashboard.
 For production, it's better to build your own Fluent Bit daemon set configuration. Check the above [YAML files in 
 Fluent Bit's github repo](https://github.com/fluent/fluent-bit-kubernetes-logging/blob/master/output/elasticsearch/fluent-bit-configmap.yaml) 
 as an example!
-
-### Hello-node
-
-```
-kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
-kubectl expose deployment hello-minikube --type=NodePort --port=8080
-minikube service hello-minikube
-```
