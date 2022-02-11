@@ -33,34 +33,30 @@ To create loging namespace and all services in the cluster, execute the followin
 
 For details see the comments in [kustomization.yaml](kustomization.yaml)!
 
-## Deploy manually
+## Accessing the apps
 
-### Deploy FluentBit DaemonSet
+To access the frontend via tunneling:
+`minikube -n logging service frontend`
 
-Follow [this guide](https://github.com/fluent/fluent-bit-kubernetes-logging) to deploy FluentBit as a DaemonSet on the local cluster.
+## Troubleshooting
 
-1/ Create logging namespace
+### Verifying services in the cluster
 
-`kubectl create namespace logging`
+Running busybox.sh script will create a temporary linux pod, and you will get a bash console.
 
-2/ Create service account and role for Fluent Bit
+Useful commands:
+- `printenv` to learn service IPs and ports
+- use `wget` to make http calls
+- `nslookup` to check hostnames (`nslookup elasticsearch`)
 
-```bash
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-service-account.yaml
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role-1.22.yaml
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role-binding-1.22.yaml
-```
+## Verifying exposed ports and endpoints
 
-3/ Create a ConfigMap used by the daemonset
+To get the exposed port and internal mapping (IPs, target ports, protocol) of frontend service:
 
-`kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-configmap.yaml`
+`kubectl get service -n logging frontend -o json`
 
-4/ Create the daemon set (for minikube in this example)
+Get endpoints:
 
-`kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-ds-minikube.yaml`
+`kubectl get endpoints -n logging frontend`
 
-Verify that the daemon set appears in the dashboard.
 
-For production, it's better to build your own Fluent Bit daemon set configuration. Check the above [YAML files in 
-Fluent Bit's github repo](https://github.com/fluent/fluent-bit-kubernetes-logging/blob/master/output/elasticsearch/fluent-bit-configmap.yaml) 
-as an example!
