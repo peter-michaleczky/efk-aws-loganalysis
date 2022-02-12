@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: logging
+#namespace: logging
 
 resources:
   # the logging namespace
@@ -27,6 +27,9 @@ resources:
 
   # a test frontend
   - frontend.yaml
+
+  # Kibana service
+  - kibana.yaml
 
 commonLabels:
   environment: development

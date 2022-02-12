@@ -49,7 +49,7 @@ Useful commands:
 - use `wget` to make http calls
 - `nslookup` to check hostnames (`nslookup elasticsearch`)
 
-## Verifying exposed ports and endpoints
+### Verifying exposed ports and endpoints
 
 To get the exposed port and internal mapping (IPs, target ports, protocol) of frontend service:
 
@@ -59,4 +59,6 @@ Get endpoints:
 
 `kubectl get endpoints -n logging frontend`
 
+### Exclude pods' log from FluentBit watching
 
+See: https://docs.fluentbit.io/manual/pipeline/filters/kubernetes#kubernetes-annotations
