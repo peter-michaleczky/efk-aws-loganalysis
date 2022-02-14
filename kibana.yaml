@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kibana
+  namespace: kubesphere-logging-system
   labels:
     app: kibana
 spec:
@@ -16,6 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana
+  namespace: kubesphere-logging-system
   labels:
     app: kibana
 spec:
@@ -24,12 +26,13 @@ spec:
       app: kibana
   template:
     metadata:
+      namespace: kubesphere-logging-system
       labels:
         app: kibana
     spec:
       containers:
         - name: kibana
-          image: docker.elastic.co/kibana/kibana:6.8.21
+          image: docker.elastic.co/kibana/kibana:7.17.0
           imagePullPolicy: IfNotPresent
           env:
             - name: "CLUSTER_NAME"
@@ -43,7 +46,8 @@ spec:
             - name: XPACK_REPORTING_ENABLED
               value: 'false'
             - name: ELASTICSEARCH_HOSTS
-              value: 'http://$(ELASTICSEARCH_SERVICE_HOST):$(ELASTICSEARCH_SERVICE_PORT)'
+              #value: 'http://$(ELASTICSEARCH_SERVICE_HOST):$(ELASTICSEARCH_SERVICE_PORT)'
+              value: 'http://elasticsearch:9200'
           resources:
             limits:
               cpu: 1000m

@@ -27,16 +27,22 @@ Verify the cluster is running:
 
 ## Deploy using YAML file
 
-To create loging namespace and all services in the cluster, execute the following command:
+To create logging in a separate namespace and all services in the cluster, execute the following command:
 
 `kubectl apply -k .`
 
 For details see the comments in [kustomization.yaml](kustomization.yaml)!
 
+## Setup integration and index pattern in Kibana
+
+- add a new index pattern for ks-logstash-log*, set timestamp field
+- add Logstash integration
+- go to Discover and you should see the log events
+
 ## Accessing the apps
 
-To access the frontend via tunneling:
-`minikube -n logging service frontend`
+To access Kibana via tunneling:
+`minikube service kibana -n kubesphere-logging-system`
 
 ## Troubleshooting
 
@@ -53,12 +59,10 @@ Useful commands:
 
 To get the exposed port and internal mapping (IPs, target ports, protocol) of frontend service:
 
-`kubectl get service -n logging frontend -o json`
+`kubectl get service -n kubesphere-logging-system frontend -o json`
 
 Get endpoints:
 
-`kubectl get endpoints -n logging frontend`
+`kubectl get endpoints -n kubesphere-logging-system frontend`
 
-### Exclude pods' log from FluentBit watching
 
-See: https://docs.fluentbit.io/manual/pipeline/filters/kubernetes#kubernetes-annotations

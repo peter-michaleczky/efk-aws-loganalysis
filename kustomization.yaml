@@ -2,20 +2,20 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  # FluentBit operator development version (https://github.com/fluent/fluentbit-operator)
-  - https://raw.githubusercontent.com/fluent/fluentbit-operator/v0.12.0/manifests/setup/setup.yaml
+  # FluentBit operator latest release (manifest directory download from https://github.com/fluent/fluentbit-operator/tree/v0.12.0)
+  - fluentbit-operator-0.12.0/manifests/setup
 
-  # some pods from quickstart example to test the operator
-  - https://raw.githubusercontent.com/fluent/fluentbit-operator/v0.12.0/manifests/quick-start/quick-start.yaml
+  # logging
+  - fluentbit-operator-0.12.0/manifests/logging-stack
 
   # ElasticSearch service (all-in-one)
-  #- elastic.yaml
-
-  # a test frontend
-  #- frontend.yaml
+  - elastic.yaml
 
   # Kibana service
-  #- kibana.yaml
+  - kibana.yaml
+
+  # a test frontend service exposed on 8080
+  - frontend.yaml
 
 commonLabels:
   environment: development

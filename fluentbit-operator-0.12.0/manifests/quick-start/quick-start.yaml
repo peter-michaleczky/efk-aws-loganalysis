@@ -1,8 +1,8 @@
-apiVersion: fluentbit.fluent.io/v1alpha2
+apiVersion: logging.kubesphere.io/v1alpha2
 kind: FluentBit
 metadata:
   name: fluent-bit
-  namespace: logging
+  namespace: kubesphere-logging-system
   labels:
     app.kubernetes.io/name: fluent-bit
 spec:
@@ -10,41 +10,41 @@ spec:
   fluentBitConfigName: fluent-bit-config
 
 ---
-apiVersion: fluentbit.fluent.io/v1alpha2
+apiVersion: logging.kubesphere.io/v1alpha2
 kind: FluentBitConfig
 metadata:
   name: fluent-bit-config
-  namespace: logging
+  namespace: kubesphere-logging-system
   labels:
     app.kubernetes.io/name: fluent-bit
 spec:
   inputSelector:
     matchLabels:
-      fluentbit.fluent.io/enabled: "true"
+      logging.kubesphere.io/enabled: "true"
   outputSelector:
     matchLabels:
-      fluentbit.fluent.io/enabled: "true"
+      logging.kubesphere.io/enabled: "true"
 
 ---
-apiVersion: fluentbit.fluent.io/v1alpha2
+apiVersion: logging.kubesphere.io/v1alpha2
 kind: Input
 metadata:
   name: dummy
-  namespace: logging
+  namespace: kubesphere-logging-system
   labels:
-    fluentbit.fluent.io/enabled: "true"
+    logging.kubesphere.io/enabled: "true"
 spec:
   dummy:
     tag: my_dummy
 
 ---
-apiVersion: fluentbit.fluent.io/v1alpha2
+apiVersion: logging.kubesphere.io/v1alpha2
 kind: Output
 metadata:
   name: stdout
-  namespace: logging
+  namespace: kubesphere-logging-system
   labels:
-    fluentbit.fluent.io/enabled: "true"
+    logging.kubesphere.io/enabled: "true"
 spec:
   match: "*"
   stdout: {}
