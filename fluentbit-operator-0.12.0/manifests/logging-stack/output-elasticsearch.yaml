@@ -9,7 +9,7 @@ metadata:
 spec:
   matchRegex: (?:kube|service)\.(.*)
   es:
-    host: elasticsearch.kubesphere-logging-system.svc
+    host: opensearch.kubesphere-logging-system.svc
     port: 9200
     generateID: true
     logstashPrefix: ks-logstash-log

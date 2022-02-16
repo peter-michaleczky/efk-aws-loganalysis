@@ -9,7 +9,7 @@ resources:
   - fluentbit-operator-0.12.0/manifests/logging-stack
 
   # ElasticSearch service (all-in-one)
-  - elastic.yaml
+  - opensearch.yaml
 
   # Kibana service
   - kibana.yaml

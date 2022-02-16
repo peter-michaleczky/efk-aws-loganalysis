@@ -46,8 +46,7 @@ spec:
             - name: XPACK_REPORTING_ENABLED
               value: 'false'
             - name: ELASTICSEARCH_HOSTS
-              #value: 'http://$(ELASTICSEARCH_SERVICE_HOST):$(ELASTICSEARCH_SERVICE_PORT)'
-              value: 'http://elasticsearch:9200'
+              value: 'http://opensearch:9200'
           resources:
             limits:
               cpu: 1000m
