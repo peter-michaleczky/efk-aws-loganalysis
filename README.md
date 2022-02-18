@@ -1,6 +1,7 @@
 # efk-aws-loganalysis
 
-Configure EFK cluster locally for loganalysis.  
+Setup an EFK cluster in Kubernetes cluster (minikube). The cluster is configured with terraform and helm. 
+Fluent-bit collects the logs from the Kubernetes ecosystem and the application components, and pushes to OpenSearch.  
 
 ## Setup Kubernetes cluster locally
 
@@ -8,6 +9,8 @@ Configure EFK cluster locally for loganalysis.
 
 - Docker Desktop (give 8 GB MB memory and 2 CPUs to Docker at least!)
 - Follow [this guide](https://minikube.sigs.k8s.io/docs/start/) to install minikube on macOS:
+- Install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform)
+- Install [helm](https://helm.sh/docs/intro/install/#through-package-managers)
 
 ```
 brew install minikube
@@ -21,22 +24,28 @@ Download Kubernetes images and start a cluster locally on Docker:
 Verify the cluster is running:
 `kubectl get pods --all-namespaces`
 
-## Open Kubernetes dashboard
+### Open Kubernetes dashboard
 
 `minikube dashboard`
 
-## Deploy using YAML file
+## Deploy with terraform
 
-To create loging namespace and all services in the cluster, execute the following command:
+The `terraform apply` command creates:
+- fluent-bit daemon set which creates a log collector pod in every node
+- fluent-bit operators to configure the inputs, parsers and outputs via terraform code
+- OpenSearch nodes and service
+- OpenSearch Dashboards service
 
-`kubectl apply -k .`
+## Setup integration and index pattern in OpenSearch Dashboard
 
-For details see the comments in [kustomization.yaml](kustomization.yaml)!
+- add a new index pattern for ks-logstash-log*, set timestamp field
+- add Logstash integration
+- go to Discover and you should see the log events
 
 ## Accessing the apps
 
-To access the frontend via tunneling:
-`minikube -n logging service frontend`
+To access OpenSearch Dashboards via tunneling:
+`minikube service opensearch-dashboard`
 
 ## Troubleshooting
 
@@ -47,18 +56,16 @@ Running busybox.sh script will create a temporary linux pod, and you will get a 
 Useful commands:
 - `printenv` to learn service IPs and ports
 - use `wget` to make http calls
-- `nslookup` to check hostnames (`nslookup elasticsearch`)
+- `nslookup` to check hostnames (`nslookup opensearch-cluster-master`)
 
 ### Verifying exposed ports and endpoints
 
 To get the exposed port and internal mapping (IPs, target ports, protocol) of frontend service:
 
-`kubectl get service -n logging frontend -o json`
+`kubectl get service opensearch-dashboards -o json`
 
 Get endpoints:
 
-`kubectl get endpoints -n logging frontend`
+`kubectl get endpoints opensearch-dashboards`
 
-### Exclude pods' log from FluentBit watching
 
-See: https://docs.fluentbit.io/manual/pipeline/filters/kubernetes#kubernetes-annotations
