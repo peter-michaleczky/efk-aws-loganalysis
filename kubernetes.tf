@@ -6,3 +6,4 @@ provider "kubernetes" {
 module logging {
   source = "./logging"
 }
+

@@ -1,6 +1,7 @@
 # efk-aws-loganalysis
 
-Configure EFK cluster locally for loganalysis.  
+Setup an EFK cluster in Kubernetes cluster (minikube). The cluster is configured with terraform and helm. 
+Fluent-bit collects the logs from the Kubernetes ecosystem and the application components, and pushes to OpenSearch.  
 
 ## Setup Kubernetes cluster locally
 
@@ -23,17 +24,19 @@ Download Kubernetes images and start a cluster locally on Docker:
 Verify the cluster is running:
 `kubectl get pods --all-namespaces`
 
-## Open Kubernetes dashboard
+### Open Kubernetes dashboard
 
 `minikube dashboard`
 
-## Deploy using terraform files
+## Deploy with terraform
 
-To create logging daemon set and operators in the cluster, execute the following command:
+The `terraform apply` command creates:
+- fluent-bit daemon set which creates a log collector pod in every node
+- fluent-bit operators to configure the inputs, parsers and outputs via terraform code
+- OpenSearch nodes and service
+- OpenSearch Dashboards service
 
-`terraform apply`
-
-## Setup integration and index pattern in Kibana
+## Setup integration and index pattern in OpenSearch Dashboard
 
 - add a new index pattern for ks-logstash-log*, set timestamp field
 - add Logstash integration
@@ -41,8 +44,8 @@ To create logging daemon set and operators in the cluster, execute the following
 
 ## Accessing the apps
 
-To access Kibana via tunneling:
-`minikube service kibana -n kubesphere-logging-system`
+To access OpenSearch Dashboards via tunneling:
+`minikube service opensearch-dashboard`
 
 ## Troubleshooting
 
@@ -53,16 +56,16 @@ Running busybox.sh script will create a temporary linux pod, and you will get a 
 Useful commands:
 - `printenv` to learn service IPs and ports
 - use `wget` to make http calls
-- `nslookup` to check hostnames (`nslookup elasticsearch`)
+- `nslookup` to check hostnames (`nslookup opensearch-cluster-master`)
 
 ### Verifying exposed ports and endpoints
 
 To get the exposed port and internal mapping (IPs, target ports, protocol) of frontend service:
 
-`kubectl get service -n kubesphere-logging-system frontend -o json`
+`kubectl get service opensearch-dashboards -o json`
 
 Get endpoints:
 
-`kubectl get endpoints -n kubesphere-logging-system frontend`
+`kubectl get endpoints opensearch-dashboards`
 
 
