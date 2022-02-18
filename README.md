@@ -8,6 +8,8 @@ Configure EFK cluster locally for loganalysis.
 
 - Docker Desktop (give 8 GB MB memory and 2 CPUs to Docker at least!)
 - Follow [this guide](https://minikube.sigs.k8s.io/docs/start/) to install minikube on macOS:
+- Install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform)
+- Install [helm](https://helm.sh/docs/intro/install/#through-package-managers)
 
 ```
 brew install minikube
@@ -25,13 +27,11 @@ Verify the cluster is running:
 
 `minikube dashboard`
 
-## Deploy using YAML file
+## Deploy using terraform files
 
-To create logging in a separate namespace and all services in the cluster, execute the following command:
+To create logging daemon set and operators in the cluster, execute the following command:
 
-`kubectl apply -k .`
-
-For details see the comments in [kustomization.yaml](kustomization.yaml)!
+`terraform apply`
 
 ## Setup integration and index pattern in Kibana
 
